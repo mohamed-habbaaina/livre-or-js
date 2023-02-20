@@ -1,0 +1,91 @@
+main{
+    max-height: 92vh;
+    height: 92vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    /* position: relative; */
+    overflow-y: auto;
+}
+.livre_or{
+    width: 100%;
+    margin: auto;
+    overflow-y: auto;
+    /* position: absolute; */
+    /* top: 155px; */
+    /* bottom: 80px; */
+
+/* backdrop-filter: blur(10px); */
+}
+.livre_or h1{
+    margin: 20px 0 30px 40%;
+}
+.livre_or table{
+    border: 3px solid black;
+    margin: auto;
+}
+#com{
+    max-width: 50%
+}
+.livre_or th, td{
+    border: 2px solid black;
+    padding: 3px;
+    text-align: center;
+}
+.livre_or th{
+    background-color: rgb(225, 19, 19);
+    color: white;
+}
+.commen_or{
+    width: 100%;
+    margin: auto;
+    /* position: absolute; */
+    /* top: 10px; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.commen_or form{
+    display: flex;
+    flex-direction: column;
+}
+.commen_or label{
+    font-weight: bold;
+}
+.commen_or input{
+    padding: 10px 20px;
+    min-width: 35vw;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+#btn_com{
+    margin: auto;
+    background-color: rgb(225, 19, 19);
+    padding: 10px 20px;
+    border-radius: 8px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    width: 80px;
+    transition: all .3s;
+}
+#btn_com:hover{
+    background-color: rgb(252, 145, 52);
+    letter-spacing: 1px;
+    color: black;
+
+}
+
+@media screen and (max-width: 1024px) {
+    .livre_or{
+        width: 70vw;
+    }
+}
+
+@media screen and (max-width: 640px) {
+    .livre_or{
+        width: 85vw;
+    }
+}
