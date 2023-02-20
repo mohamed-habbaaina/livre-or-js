@@ -1,0 +1,205 @@
+@import url('https://fonts.googleapis.com/css2? family= Poppins:wght@500 & display=swap');
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    list-style: none;
+    font-size: 18px;
+    font-family: 'Poppins', sans-serif;
+
+}
+body{
+    background-image: url('../img/home.webp');
+    background-size: cover;
+    height: 100vh;
+    min-height: 92hw;
+    width: 100vw;
+}
+
+/************** la navigation **********************/
+/* *********************************************** */
+header{
+    height: 7vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0 20px;
+    backdrop-filter: blur(10px);
+    font-weight: bold;
+
+}
+.logo{
+    width: 200px;
+}
+.nav_bar{
+    width: auto;
+    min-height: 8vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.nav_bar a{
+    margin: 0 40px;
+    color: rgb(225, 19, 19);
+    transition: all .3s;
+}
+.nav_bar a:hover{
+    color: rgb(252, 145, 52);
+    letter-spacing: 1px;
+} 
+
+/****************** btn if connection ************/
+/* ********************************************* */
+
+.btn_comm{
+    padding: 1px 2px;
+    border-radius: 15px;
+    color: white;
+    font-weight: bold;
+    border: 1px solid rgb(225, 19, 19);
+;
+
+}
+main{
+    width: 100%;
+}
+.hom{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    position: relative;
+}
+.hom h1{
+    text-align: center;
+    margin-bottom: 20px;
+}
+.hom_bnv{
+max-width: 60vw;
+text-align: justify;
+}
+.hom_bnv p{
+    margin: 15px 0;
+}
+.hom_bnv span{
+    font-weight: bold;
+    color: rgb(225, 19, 19);
+    letter-spacing: 1px;
+    transition: all .3s;
+    cursor: pointer;
+}
+.hom_bnv span:hover{
+    color: rgb(252, 145, 52);
+    letter-spacing: 1.5px;
+    font-size: 105%;
+
+}
+/********************* le footer ******************/
+/* ********************************************** */
+footer{
+    backdrop-filter: blur(10px);
+    min-height: 7vh;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+}
+.btn_git{
+    background-color: rgb(225, 19, 19);
+    padding: 10px 20px;
+    margin-left: 40px;
+    border-radius: 8px;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    width: 80px;
+    transition: all .3s;
+}
+.btn_git:hover{
+    background-color: rgb(252, 145, 52);
+    letter-spacing: 1px;
+    color: black;
+}
+
+/* ********** Les Message INSER Commentaire****** */
+/* ********************************************** */
+.mess_inser{
+    /* color: rgb(236, 42, 21); */
+}
+/************************ burger****************** */
+/* *********************************************** */
+
+.burger{
+    display: none;
+    cursor: pointer;
+}
+.burger div{
+    height: 3px;
+    width: 25px;
+    background-color: rgb(0, 0, 0);
+    margin: 5px;
+}
+
+/***************** @media screen: ecran moyen *******/
+/* ************************************************ */
+
+@media screen and (max-width: 1024px) {
+.nav_bar{
+    justify-content: space-between;
+}
+.nav_bar a{
+    margin: 0 20px;
+
+}
+.hom_bnv{
+    max-width: 60vw;
+
+}
+    
+}
+/********************* Menu burger ******************/
+/* ************************************************ */
+
+@media screen and (max-width: 768px) {
+.logo{
+    width: 180px;
+    margin-top: 5px;
+}
+.hom_bnv{
+    max-width: 80vw;
+}
+
+body{
+    overflow: hidden;
+    } 
+.nav_bar{
+    position: absolute;
+    right: 0px;
+    height: 92vh;
+    top: 8vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 50%;
+    z-index: 100;
+    transform: translateX(100%);
+    transition: transform .6s ease-in;
+}
+.nav_bar a:hover{
+    color: rgb(255, 175, 106);
+    letter-spacing: 2px;
+} 
+.burger{
+    display: block;
+}
+.nav-active{
+    transform: translateX(0%);
+    background-color: rgb(225, 19, 19);
+}
+.nav-active a{
+    color:white;
+    font-weight: bold;
+}
+
+}
