@@ -19,7 +19,7 @@ class User{
     public function __construct(){
 
         try {
-            $this->db = new PDO("mysql:host=$this->servername;dbname=$this->database", "$this->username_b", "$this->password_b");
+            $this->db = new PDO("mysql:host=$this->servername;dbname=$this->database;charset=utf8", "$this->username_b", "$this->password_b");
         }
        catch(PDOException $e){
             echo 'ERREUR: ' . $e->getMessage();
@@ -55,8 +55,18 @@ class User{
             $request->execute([":email" => "$email", ":login" => "$login", ":password" => "$password"]);
 
         endif;
+    }
 
+    /**
+     * @return true,false
+     */
+    public function isConnected($login){
 
+        if(isset($_SESSION['login'])):
+            return true;
+        else:
+            return false;
+        endif;
     }
 
 }
