@@ -22,7 +22,7 @@ class User{
             $this->db = new PDO("mysql:host=$this->servername;dbname=$this->database;charset=utf8", "$this->username_b", "$this->password_b");
         }
        catch(PDOException $e){
-            echo 'ERREUR: ' . $e->getMessage();
+            echo 'ERROR: ' . $e->getMessage();
        }
     }
 
@@ -67,6 +67,44 @@ class User{
         else:
             return false;
         endif;
+    }
+
+    /**
+     * @return  true,false
+     */
+
+    public function connection($login, $password){
+
+        $data = $this->check_DB($login);
+
+        if(count($data) > 0):
+
+            $password_db = $data[0]['password'];
+            
+                // verifier le password Haché.
+                if (password_verify($password, $password_db)):
+                  
+                    return true;
+                else:
+                     return false;
+                endif;
+        endif;
+
+    }
+
+    /**
+     * @return $id
+     */
+    public function getId($login){
+
+        $data = $this->check_DB($login);
+
+        if(count($data) > 0):
+
+        return $data[0]['id'];
+
+        endif;
+
     }
 
 }
