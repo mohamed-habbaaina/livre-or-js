@@ -33,8 +33,17 @@ const navSlide = () => {
     const co_password = document.forms['formInscription']['co_password'];
 
 
+    //******************* Listener ******************** */
+    //****************************************************/ 
+
+    email.addEventListener('change', validEmail);
+    login.addEventListener('change', validLogin);
+    password.addEventListener('change', validPassword);
+    co_password.addEventListener('change', validCo_password);
+
+
     // *********************** Email *********************/
-    email.addEventListener('change', function() {
+    function validEmail(){
 
         // Creation of the Regexp to validate the email
         let emailRegExp = new RegExp(
@@ -51,17 +60,17 @@ const navSlide = () => {
         if(testEmail){
             small.innerHTML = 'Adresse Email Valide';
             small.style.color = 'green';
-            return true; // pour l'utiliser dans la function de submit form
+            return true; // pour l'utiliser dans la function de submitForm
         } else{
             small.innerHTML = 'Adresse Email Pas Valide (Carectère Valide: A-Z 0-9 _.-)';
             small.style.color = 'red';
             return false;
         }
-})
+}
 
     // *********************** Login *********************/
 
-    login.addEventListener('change', function(){
+    function validLogin(){
 
         let small = login.nextElementSibling;
         if(login.value.length < 3){
@@ -74,11 +83,11 @@ const navSlide = () => {
             small.style.color = 'green';
             return true;
         }
-    })
+    }
 
     // *********************** Password ********************/
 
-    password.addEventListener('change', function(){
+    function validPassword(){
 
         let messg;
         let valide = false;
@@ -113,11 +122,11 @@ const navSlide = () => {
             small.style.color = 'red';
             return false;
         }
-    })
+    }
 
     //****************** Confermation Password ***************/
 
-    co_password.addEventListener('change', function(){
+    function validCo_password(){
 
         const small = co_password.nextElementSibling;
 
@@ -129,9 +138,28 @@ const navSlide = () => {
         else{
             small.innerHTML = 'Veuillez entrer le même Password !';
             small.style.color = 'red';
+            return false;
         }
 
-    })
+    }
+
+    //******************  Validation  **********************/
+
+/**
+ * 
+ * @returns true if inputs valide
+ */
+    function submitForm() {
+
+        if(validEmail() && validLogin() && validPassword() && validCo_password()){
+            return true;
+        }
+        else{
+            return false;
+        }
+        
+    }
+
 
     // ****************  Fetch and Create User ****************/
     //*********************************************************/
@@ -140,5 +168,27 @@ const navSlide = () => {
 
         e.preventDefault();
 
+        const payload = new FormData(this); // creation object Form.
+
+        let email = payload.get('email');
+        let login = payload.get('username');
+        let password = payload.get('password');
+        let co_password = payload.get('co_password');
+
+        await fetch('./inscription.php', {
+            method: 'post',
+            body: payload
+        })
+        .then((response) => {
+
+            //  Displaying message if user is created.
+            if(response.status == 201 && submitForm()){
+                alert(response.statusText);
+                this.submit();  // submit form.
+            }
+            return response.text();
+        })
         
+        
+
     })
