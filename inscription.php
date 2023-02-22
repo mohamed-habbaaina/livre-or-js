@@ -48,12 +48,8 @@ if (isset($_POST['username'])){
             //  change status HTTP de 200 a 201
             header("HTTP/1.1 201 created account");
 
-            //TODO redirection to connexion.php.
-            // header("location:./connexion.php");
-
             $_SESSION['login'] = $login;
 
-            // todo: affichage de message après register
         else:
             $err[] = '<li>Le login n\'est pas disponible, Veuillez le changer !</li>';
         endif;

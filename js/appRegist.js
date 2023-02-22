@@ -156,10 +156,15 @@
         })
         .then((response) => {
 
+            if(submitForm()){
+
+                this.submit();  // submit form.
+            }
+
             //  Displaying message if user is created.
             if(response.status == 201 && submitForm()){
                 alert(response.statusText);
-                this.submit();  // submit form.
+                window.location = "./connexion.php";
             }
             return response.text();
         })
