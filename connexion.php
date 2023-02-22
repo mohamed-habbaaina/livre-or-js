@@ -23,9 +23,6 @@ if (isset($_POST['username'])):
                     //  change status HTTP de 200 a 201
                     header("HTTP/1.1 201 you are connected");
                 
-                    // redirection vers la page 
-                    header('location: commentaires.php');
-
                 else:
                     $err_pw_bd = 'Login ou Password incorrecte !';
                 endif;

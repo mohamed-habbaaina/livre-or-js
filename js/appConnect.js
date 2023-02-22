@@ -103,11 +103,17 @@
         })
         .then((response) => {
 
+            if(submitForm()){
+
+                this.submit();  // submit form.
+            }
+
             //  Displaying message if user is created.
             if(response.status == 201 && submitForm()){
-                alert(response.statusText);
-                this.submit();  // submit form.
-                console.log('data');
+
+                alert(response.statusText); // display message connection
+                window.location = "./commentaires.php"; // changed page
+
             }
             return response.text();
         })
