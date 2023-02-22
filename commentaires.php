@@ -49,6 +49,7 @@ if (isset($_POST['submit'])){
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/commentair.css">
     <script src="./app.js" defer></script>
+    <script src="./js/appComment.js" defer></script>
     <title>Commentaires</title>
 </head>
 <body>
@@ -66,10 +67,11 @@ if (isset($_POST['submit'])){
                 }
                 ?>
             </p>
-            <form action="#" method="post" class="form_comme">
+            <form action="#" method="post" class="form_comme" id="formComment">
 
             <label for="comment">Laisser Un Commentaire !</label>
             <input type="textarea" name="comment" placeholder="Poster Votre Commentaire Ici">
+            <small></small>
             <input type="submit" name="submit" id="btn_c_v" value="Envoyer">
 
             </form>
