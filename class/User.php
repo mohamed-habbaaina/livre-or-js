@@ -6,6 +6,8 @@ class User{
     private $password;
     private $repass;
     private $data;
+    private $comment;
+    private $id;
 
     // La DB.
     private $servername = 'localhost';
@@ -60,7 +62,7 @@ class User{
     /**
      * @return true,false
      */
-    public function isConnected($login){
+    public function isConnected(){
 
         if(isset($_SESSION['login'])):
             return true;
@@ -105,6 +107,33 @@ class User{
 
         endif;
 
+    }
+
+
+    /**
+     * @return $_POST['comment']
+     */
+    public function securComment($comment){
+
+        $this->comment = addslashes(htmlspecialchars($comment));
+        return $this->comment;
+    }
+
+    /**
+     * @return true,false
+     */
+    public function validComment($comment){
+        if(strlen($comment) > 5):
+            return true;
+        else:
+            return false;
+        endif;
+    }
+
+    public function inserComment($comment, $id){
+
+        $requestComment = $this->db->prepare("INSERT INTO `commentaires` (`commentaire`, `id_utilisateur`, `date`) VALUES ('$comment', '$id', NOW())");
+        $requestComment->execute();
     }
 
 }
