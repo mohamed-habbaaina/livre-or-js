@@ -8,35 +8,28 @@ $user = new User();
 if(!$user->isConnected()):
     
     header("location: index.php");
-
-else:
-    $login = $_SESSION['login'];
-    $id = $_SESSION['id'];
 endif;
 
-if (isset($_POST['submit'])){
+$login = $_SESSION['login'];
+$id = $_SESSION['id'];
 
 
-    if(isset($_POST['comment'])):
+if (isset($_POST['comment'])){
 
+    // secur input
+    $comment = $user->securComment($_POST['comment']);
 
-        // secur input
-        $comment = $user->securComment($_POST['comment']);
+    // valid comment
+    if($user->validComment($comment)):
 
-        // valid comment
-        if($user->validComment($comment)):
-
-            // inser comment in DB.
-            $user->inserComment($comment, $id);
-
-            $mess_inser = 'Votre message est bien enregistré <a href="livre-or.php">"Livre d\'Or"</a> !';
-
-        else:
-            $err_comm = 'Votre commentaire est trop court -Minimum 6 caractère !';
-        endif;
-
+        // inser comment in DB.
+        $user->inserComment($comment, $id);
+        $mess_inser = 'Votre message est bien enregistré <a href="livre-or.php">"Livre d\'Or"</a> !';
+    
+    else:
+        $err_comm = 'Votre commentaire est trop court -Minimum 8 caractère !';
+        
     endif;
-
 }
 ?>
 <!DOCTYPE html>
@@ -48,7 +41,7 @@ if (isset($_POST['submit'])){
     <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="style/style.css">
     <link rel="stylesheet" href="style/commentair.css">
-    <script src="./app.js" defer></script>
+    <script src="./js/app.js" defer></script>
     <script src="./js/appComment.js" defer></script>
     <title>Commentaires</title>
 </head>
@@ -67,12 +60,13 @@ if (isset($_POST['submit'])){
                 }
                 ?>
             </p>
-            <form action="#" method="post" class="form_comme" id="formComment">
+            <form action="#" method="post" id="formComment">
 
             <label for="comment">Laisser Un Commentaire !</label>
             <input type="textarea" name="comment" placeholder="Poster Votre Commentaire Ici">
             <small></small>
-            <input type="submit" name="submit" id="btn_c_v" value="Envoyer">
+            <button type="submit" id="btn_c_v">Envoyer</button>
+            <small></small>
 
             </form>
         </div>
