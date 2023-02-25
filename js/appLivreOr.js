@@ -1,4 +1,45 @@
 
+// creation table comments.
+window.addEventListener("DOMContentLoaded", () => {
+
+
+    let form = new FormData(formlivre);
+    fetch("./includes/liveFetch.php",{
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: form
+        })
+    .then(response => {
+        return response.json();
+    })
+    .then((data) => {
+
+        // Selected the tbody
+        const tbody = document.querySelector("tbody")
+
+        for(let item of data){
+
+            // creation tbody: <tr> , 3 * <td>, 
+            let tr = document.createElement("tr");
+            let td1 = document.createElement("td");
+            let td2 = document.createElement("td");
+            let td3 = document.createElement("td");
+
+            // Assigning data to elements
+            td1.textContent = item.date;
+            td2.textContent = item.login;
+            td3.textContent = item.commentaire;
+
+            // to tr then to tbody
+            tr.append(td1, td2,td3);
+            tbody.append(tr);
+
+        }
+    })
+})
 const formlivre = document.forms['formlivre'];
 const inputCommentLivre = document.forms['formlivre']['comment'];
 
@@ -42,44 +83,3 @@ formlivre.addEventListener('submit', function(e) {
     }    
 })
 
-// creation table comments.
-window.addEventListener("DOMContentLoaded", () => {
-
-
-    let form = new FormData(formlivre);
-    fetch("./includes/liveFetch.php",{
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: form
-        })
-    .then(response => {
-        return response.json();
-    })
-    .then((data) => {
-
-        // Selected the tbody
-        const tbody = document.querySelector("tbody")
-
-        for(let item of data){
-
-            // creation tbody: <tr> , 3 * <td>, 
-            let tr = document.createElement("tr");
-            let td1 = document.createElement("td");
-            let td2 = document.createElement("td");
-            let td3 = document.createElement("td");
-
-            // Assigning data to elements
-            td1.textContent = item.date;
-            td2.textContent = item.login;
-            td3.textContent = item.commentaire;
-
-            // to tr then to tbody
-            tr.append(td1, td2,td3);
-            tbody.append(tr);
-
-        }
-    })
-})
