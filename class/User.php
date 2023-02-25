@@ -123,7 +123,8 @@ class User{
      * @return true,false
      */
     public function validComment($comment){
-        if(strlen($comment) > 5):
+        if(strlen($comment) > 7):
+
             return true;
         else:
             return false;
