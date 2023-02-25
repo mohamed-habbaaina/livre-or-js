@@ -5,21 +5,16 @@ main{
     display: flex;
     flex-direction: column-reverse;
     justify-content: center;
-    /* position: relative; */
     overflow-y: auto;
 }
 .livre_or{
     width: 100%;
-    margin: auto;
+    margin: 0 auto 70px;
     overflow-y: auto;
-    /* position: absolute; */
-    /* top: 155px; */
-    /* bottom: 80px; */
-
-/* backdrop-filter: blur(10px); */
 }
 .livre_or h1{
-    margin: 20px 0 30px 40%;
+    text-align: center;
+    margin: 20px 0;
 }
 .livre_or table{
     border: 3px solid black;
@@ -39,7 +34,7 @@ main{
 }
 .commen_or{
     width: 100%;
-    margin: auto;
+    margin: 30px auto 0;
     /* position: absolute; */
     /* top: 10px; */
     display: flex;
