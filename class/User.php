@@ -131,10 +131,22 @@ class User{
         endif;
     }
 
+    /**
+     * inser comment in DB
+     */
     public function inserComment($comment, $id){
 
         $requestComment = $this->db->prepare("INSERT INTO `commentaires` (`commentaire`, `id_utilisateur`, `date`) VALUES ('$comment', '$id', NOW())");
         $requestComment->execute();
     }
+    
+
+    public function deconnect(){
+        
+        $_SESSION = array();//Ecraser le tableau de session 
+        session_unset(); //Detruit toutes les variables de la session en cours
+        session_destroy();//Destruit la session en cours
+    }
+
 
 }
