@@ -148,5 +148,16 @@ class User{
         session_destroy();//Destruit la session en cours
     }
 
+    /**
+     **  Retrieve the data from the comments table and the login that posted the comment
+     //? utilisateurs INNER JOIN `commentaires` ON utilisateurs.id = commentaires.id_utilisateur
+     */
+    public function livrOr(){
+        $quryAllComment = $this->db->prepare("SELECT login, commentaire, date FROM utilisateurs INNER JOIN `commentaires` ON utilisateurs.id = commentaires.id_utilisateur ORDER BY date DESC");
+        $quryAllComment->execute();
+
+        return $quryAllComment->fetchall(PDO::FETCH_ASSOC);
+
+    }
 
 }
