@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2? family= Poppins:wght@500 & display=swap');
+/* @import url('https://fonts.googleapis.com/css2? family= Poppins:wght@500 & display=swap'); */
 *{
     margin: 0;
     padding: 0;
@@ -10,8 +10,6 @@
 
 }
 body{
-    background-image: url('../img/home.webp');
-    background-size: cover;
     height: 100vh;
     min-height: 92hw;
     width: 100vw;
@@ -70,6 +68,7 @@ main{
     align-items: center;
     min-height: 80vh;
     position: relative;
+    z-index: -10;
 }
 .hom h1{
     text-align: center;
@@ -121,6 +120,13 @@ footer{
     color: black;
 }
 
+/* ********** L'affichage des erreurs *********** */
+/* ********************************************** */
+.errs{
+    margin-left: 30px;
+    color:rgb(225, 19, 19);
+}
+
 /* ********** Les Message INSER Commentaire****** */
 /* ********************************************** */
 .mess_inser{
@@ -143,7 +149,7 @@ footer{
 /***************** @media screen: ecran moyen *******/
 /* ************************************************ */
 
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1109px) {
 .nav_bar{
     justify-content: space-between;
 }
@@ -157,6 +163,19 @@ footer{
 }
     
 }
+
+@media screen and (max-width: 910px) {
+    .nav_bar a{
+        margin: 0 10px;
+    
+    }
+    .hom_bnv{
+        max-width: 80vw;
+    
+    }
+
+}
+
 /********************* Menu burger ******************/
 /* ************************************************ */
 
@@ -166,7 +185,7 @@ footer{
     margin-top: 5px;
 }
 .hom_bnv{
-    max-width: 80vw;
+    max-width: 94vw;
 }
 
 body{
@@ -187,7 +206,7 @@ body{
     transition: transform .6s ease-in;
 }
 .nav_bar a:hover{
-    color: rgb(255, 175, 106);
+    color: rgb(255, 221, 163);
     letter-spacing: 2px;
 } 
 .burger{

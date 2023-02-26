@@ -5,6 +5,9 @@ justify-content: center;
 align-items: center;
 flex-direction: column;
 }
+.bienv form{
+    display: flex;
+    flex-direction: column;}
 .bienv h3{
     font-size: 45px;
     margin-bottom: 30PX;
@@ -18,12 +21,21 @@ flex-direction: column;
     border-radius: 5px;
 }
 .mess_inser{
-    color: red;
-    margin-bottom: 20px;
-
+    color: green;
+    margin-bottom: 15px;
 }
+.mess_inser a{
+    font-weight: bold;
+    color: rgb(225, 19, 19);
+}
+.mess_inser a:hover{
+    
+    color:rgb(252, 145, 52);
+    letter-spacing: 1.5px;
+}
+
 #btn_c_v{
-    max-width: 40px;
+    min-width: 35vw;
     background-color: rgb(225, 19, 19);
     padding: 10px 0;
     border-radius: 8px;
