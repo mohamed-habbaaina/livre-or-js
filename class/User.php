@@ -160,4 +160,10 @@ class User{
 
     }
 
+
+    // methode pour modifier le profil de user.
+    public function update($login, $password, $lastLogin){
+        $requ_updt = $this->db->prepare("UPDATE `utilisateurs` SET login=?, password=? WHERE login='$lastLogin';");
+        $requ_updt->execute(["$login", "$password"]);
+}
 }
