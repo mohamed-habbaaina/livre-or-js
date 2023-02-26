@@ -6,9 +6,10 @@ if (isset($_SESSION['login'])){ ?>
     <a href="index.php"><img src="img/logoFid.jpg" alt="logo" class="logo"></a>
     <nav>
         <ul class="nav_bar">
-            <li><a href="index.php">Home</a></li>    
-            <li><a href="livre-or.php">Le Livre d'Or</a></li>    
-            <li><a href="includes/decconect.php">Se Déconnecter</a></li>    
+            <li><a href="index.php">Home</a></li>
+            <li><a href="commentaires.php">Commentaires</a></li>    
+            <li><a href="livre-or.php">Livre d'Or</a></li>    
+            <li><a href="includes/decconect.php">Déconnexion</a></li>    
             <li><a href="profil.php">Profil</a></li>    
         </ul>    
         <div class="burger">
