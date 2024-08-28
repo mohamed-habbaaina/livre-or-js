@@ -3,7 +3,7 @@ session_start();
 require_once './class/User.php';
 $user = new User();
 
-if (isset($_POST['username'])){
+if (isset($_POST['username'])) {
 
     // validation inputs.
     $login = $user->isValid($_POST['username']);
@@ -41,24 +41,19 @@ if (isset($_POST['username'])){
     //  Verify that the user has completed the entire form.
     if ($email && $login && $password && $co_password):
 
-        if(empty($user->check_DB($login))):
+        if (empty($user->check_DB($login))):
 
             $user->register($email, $login, $password);
-            
-            //  change status HTTP de 200 a 201
-            header("HTTP/1.1 201 created account");
-
-            $_SESSION['login'] = $login;
 
         else:
             $err[] = '<li>Le login n\'est pas disponible, Veuillez le changer !</li>';
         endif;
     endif;
-    
 }
 ?>
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -70,45 +65,47 @@ if (isset($_POST['username'])){
     <script src="./js/appRegist.js" defer></script>
     <title>Inscription</title>
 </head>
+
 <body>
-<?php include 'includes/header.php' ?>
-<main>
-    <div class="form">
+    <?php include 'includes/header.php' ?>
+    <main>
+        <div class="form">
 
-    <!-- error display -->
-        <ul class="errs"><?php
-                if (!empty($err)){
-                    $i = 0;
-                    while(isset($err[$i])):
-                        echo $err[$i];
-                        $i++;
-                    endwhile;
-                }
-        ?></ul>
-        <form action="#" method="post" id="formInscription">
-            <h1>Inscription</h1>
+            <!-- error display -->
+            <ul class="errs"><?php
+                                if (!empty($err)) {
+                                    $i = 0;
+                                    while (isset($err[$i])):
+                                        echo $err[$i];
+                                        $i++;
+                                    endwhile;
+                                }
+                                ?></ul>
+            <form action="#" method="post" id="formInscription">
+                <h1>Inscription</h1>
 
-            <label for="email">Email</label>
-            <input type="email" name="email" placeholder="Entre Votre Email">
-            <small></small>
+                <label for="email">Email</label>
+                <input type="email" name="email" placeholder="Entre Votre Email">
+                <small></small>
 
-            <label for="username">Login</label>
-            <input type="text" name="username" placeholder="Entre Votre Login">
-            <small></small>
+                <label for="username">Login</label>
+                <input type="text" name="username" placeholder="Entre Votre Login">
+                <small></small>
 
-            <label for="password">Password</label>
-            <input type="password" name="password" placeholder="Entre Votre Password">
-            <small></small>
+                <label for="password">Password</label>
+                <input type="password" name="password" placeholder="Entre Votre Password">
+                <small></small>
 
-            <label for="co-password">Confirmer Password</label>
-            <input type="password" name="co_password" placeholder="Confirmer Votre Password">
-            <small></small>
+                <label for="co-password">Confirmer Password</label>
+                <input type="password" name="co_password" placeholder="Confirmer Votre Password">
+                <small></small>
 
-            <button type="submit">Valider</button>
-        </form>
+                <button type="submit">Valider</button>
+            </form>
 
-    </div>
-</main>
-<?php include 'includes/footer.php' ?>
+        </div>
+    </main>
+    <?php include 'includes/footer.php' ?>
 </body>
+
 </html>

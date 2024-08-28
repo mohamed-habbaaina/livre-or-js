@@ -1,6 +1,5 @@
 <?php
-session_start();
-?>
+session_start(); ?>
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -13,7 +12,7 @@ session_start();
     <title>Home</title>
 </head>
 <body>
-<?php include 'includes/header.php' ?>
+<?php include "includes/header.php"; ?>
 <main>
     <div class="hom">
         <div class="hom_bnv">
@@ -26,6 +25,6 @@ Pendant le festival sont également organisés le FIDLab, plateforme de soutien 
 
 </main>
 
-<?php include 'includes/footer.php' ?>
+<?php include "includes/footer.php"; ?>
 </body>
 </html>
