@@ -1,4 +1,5 @@
 <?php
+
 class User
 {
     public $login;
@@ -10,14 +11,15 @@ class User
     private $id;
 
     // La DB.
-    private $servername = "db";
-    private $username_b = "user";
-    private $password_b = "password";
-    private $database = "mydb";
+    private string $servername = "localhost";
+    private string $username_b = "user";
+    private string $password_b = "password";
+    private string $database = "mydb";
 
-    private $db;
+    protected $db;
 
     // la connexion à la DB.
+
     public function __construct()
     {
         try {
@@ -31,10 +33,9 @@ class User
         }
     }
 
-    public function isValid($element)
+    public function isValid(string $element): string
     {
-        $element = htmlspecialchars(strip_tags(trim($element)));
-        return $element;
+        return htmlspecialchars(strip_tags(trim($element)));
     }
 
     /**
@@ -51,7 +52,7 @@ class User
 
     /**
      *
-     * @return INSER INTO DB
+     * @return int 201 when success
      */
     public function register($email, $login, $password)
     {
@@ -66,6 +67,7 @@ class User
             ]);
             return header("http/1.1 201 created");
         endif;
+        header("http/1.1 400 Bad Request");
     }
 
     /**
@@ -115,7 +117,7 @@ class User
     /**
      * @return $_POST['comment']
      */
-    public function securComment($comment)
+    public function securComment(string $comment): string
     {
         $this->comment = addslashes(htmlspecialchars($comment));
         return $this->comment;
@@ -124,7 +126,7 @@ class User
     /**
      * @return true,false
      */
-    public function validComment($comment)
+    public function validComment(string $comment): bool
     {
         if (strlen($comment) > 7):
             return true;
@@ -136,12 +138,21 @@ class User
     /**
      * inser comment in DB
      */
-    public function inserComment($comment, $id)
+    public function inserComment($comment, $id): void
     {
         $requestComment = $this->db->prepare(
-            "INSERT INTO commentaires (commentaire, id_utilisateur, date) VALUES ($comment, $id, NOW())"
-        );
-        $requestComment->execute();
+            "INSERT INTO commentaires (commentaire, id_utilisateur, date) VALUES (:comment, :id, NOW())"        );
+        $result = $requestComment->execute([
+            ':comment' => $comment,
+            ':id' => $id
+        ]);
+
+        if ($result) {
+            header("http/1.1 201 created");
+        } else {
+            header("http/1.1 400 Bad Request");
+        }
+
     }
 
     public function deconnect()
@@ -160,7 +171,7 @@ class User
      *
      * @return array
      */
-    public function livrOr()
+    public function livrOr(): array
     {
         $queryAllComment = $this->db->prepare(
             "SELECT login, commentaire, date FROM utilisateurs INNER JOIN commentaires ON utilisateurs.id = commentaires.id_utilisateur ORDER BY date DESC"
@@ -188,5 +199,10 @@ class User
             ":password" => $password,
             ":lastLogin" => $lastLogin
         ]);
+    }
+
+    public function getDb()
+    {
+        return $this->db;
     }
 }

@@ -131,7 +131,6 @@ formInscription.addEventListener("submit", async function (e) {
     method: "post",
     body: new FormData(this),
   }).then((response) => {
-    console.log(response);
     //  Displaying message if user is created.
     if (response.status === 201) {
       alert("Utilisateur créé avec succès !");
