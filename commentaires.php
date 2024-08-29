@@ -66,7 +66,7 @@ if (isset($_POST['comment'])){
             <input type="textarea" name="comment" placeholder="Poster Votre Commentaire Ici">
             <small></small>
             <button type="submit" id="btn_c_v">Envoyer</button>
-            <small></small>
+            <small id="s_comment"></small>
 
             </form>
         </div>

@@ -11,7 +11,7 @@ class User
     private $id;
 
     // La DB.
-    private string $servername = "localhost";
+    private string $servername = "db";
     private string $username_b = "user";
     private string $password_b = "password";
     private string $database = "mydb";
@@ -86,19 +86,19 @@ class User
      * @return  true,false
      */
 
-    public function connection($login, $password)
+    public function connection(string $login, string $password)
     {
         $data = $this->check_DB($login);
 
         if (count($data) > 0):
             $password_db = $data[0]["password"];
 
-            // verifier le password Haché.
             if (password_verify($password, $password_db)):
                 return true;
             else:
                 return false;
             endif;
+            return false;
         endif;
     }
 
@@ -141,18 +141,12 @@ class User
     public function inserComment($comment, $id): void
     {
         $requestComment = $this->db->prepare(
-            "INSERT INTO commentaires (commentaire, id_utilisateur, date) VALUES (:comment, :id, NOW())"        );
+            "INSERT INTO commentaires (commentaire, id_utilisateur, date) VALUES (:comment, :id, NOW())"
+        );
         $result = $requestComment->execute([
             ':comment' => $comment,
             ':id' => $id
         ]);
-
-        if ($result) {
-            header("http/1.1 201 created");
-        } else {
-            header("http/1.1 400 Bad Request");
-        }
-
     }
 
     public function deconnect()

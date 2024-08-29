@@ -133,7 +133,7 @@ formInscription.addEventListener("submit", async function (e) {
   }).then((response) => {
     //  Displaying message if user is created.
     if (response.status === 201) {
-      alert("Utilisateur créé avec succès !");
+    //   alert("Utilisateur créé avec succès !");
       window.location.href = "./connexion.php";
     }
     // return response.text();

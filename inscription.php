@@ -1,5 +1,8 @@
 <?php
 session_start();
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 require_once './class/User.php';
 $user = new User();
 
@@ -86,21 +89,21 @@ if (isset($_POST['username'])) {
 
                 <label for="email">Email</label>
                 <input type="email" name="email" placeholder="Entre Votre Email">
-                <small></small>
+                <small id="s_email"></small>
 
                 <label for="username">Login</label>
                 <input type="text" name="username" placeholder="Entre Votre Login">
-                <small></small>
+                <small id="s_username"></small>
 
                 <label for="password">Password</label>
                 <input type="password" name="password" placeholder="Entre Votre Password">
-                <small></small>
+                <small id="s_password"></small>
 
                 <label for="co-password">Confirmer Password</label>
                 <input type="password" name="co_password" placeholder="Confirmer Votre Password">
-                <small></small>
+                <small id="s_co_password"></small>
 
-                <button type="submit">Valider</button>
+                <button type="submit" id="submit_register">Valider</button>
             </form>
 
         </div>

@@ -1,8 +1,10 @@
 <?php
 session_start();
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
+header("Access-Control-Allow-Headers: Content-Type, Authorization");
 require_once './class/User.php';
 $user = new User();
-
 // $user->livrOr();
 
 if($user->isConnected()):
@@ -78,9 +80,7 @@ if (isset($_POST['comment'])){
             }?>
         </p>
                 
-        <form action="#" method="post" id="formlivre">
-    
-                
+        <form action="#" method="post" id="formlivre">            
             <label for="commentaire">Laisser Un Commentaire !</label>
             <input type="textarea" name="comment" placeholder="Poster Votre Commentaire Ici">
             <small></small>
