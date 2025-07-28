@@ -1,9 +1,12 @@
 <?php
 
 require_once './class/User.php';
+require_once './vendor/autoload.php';
+
 class UserTest extends \PHPUnit\Framework\TestCase
 {
     protected User $user;
+    
     public function setUp(): void
     {
         $this->user = new User();
@@ -16,26 +19,46 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
     public function testCheck_DB()
     {
-        $this->assertTrue(is_array($this->user->check_DB("iron")));
+        $result = $this->user->check_DB("iron");
+        $this->assertTrue(is_array($result) || is_null($result));
     }
 
     public function testRegister()
     {
-        $this->assertTrue(is_array($this->user->check_DB("test")));
-        $this->user->register("test@test.com", "test", "test");
-        $this->assertEquals(201, http_response_code());
+        // Test de l'enregistrement d'un utilisateur
+        $email = "test@test.com";
+        $login = "test_user_" . time(); // Login unique
+        $password = password_hash("test123", PASSWORD_DEFAULT);
+        
+        $this->user->register($email, $login, $password);
+        
+        // Vérifier que l'utilisateur a été inséré
+        $userData = $this->user->check_DB($login);
+        $this->assertNotNull($userData);
+        $this->assertEquals($login, $userData['login']);
     }
 
     public function testIsUserInserted(): void
     {
-        $this->assertTrue(is_array($this->user->check_DB("test")));
+        $testLogin = "test_user_check";
+        $email = "testcheck@test.com";
+        $password = password_hash("test123", PASSWORD_DEFAULT);
+        
+        // Insérer un utilisateur de test
+        $this->user->register($email, $testLogin, $password);
+        
+        // Vérifier qu'il existe
+        $userData = $this->user->check_DB($testLogin);
+        $this->assertNotNull($userData);
     }
 
     public function tearDown(): void
     {
         $db = $this->user->getDb();
-
-        $request = $db->prepare("DELETE FROM utilisateurs WHERE login='test'");
-        $request->execute();
+        
+        // Nettoyer les utilisateurs de test
+        $db->selectCollection('utilisateurs')->deleteMany([
+            'login' => ['$regex' => '^test_user_']
+        ]);
     }
 }

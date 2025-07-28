@@ -1,4 +1,9 @@
 <?php
+require_once __DIR__ . '/../vendor/autoload.php';
+
+use MongoDB\Client;
+use MongoDB\BSON\ObjectId;
+use MongoDB\BSON\UTCDateTime;
 
 class User
 {
@@ -10,25 +15,25 @@ class User
     private $comment;
     private $id;
 
-    // La DB.
-    private string $servername = "db";
-    private string $username_b = "user";
-    private string $password_b = "password";
-    private string $database = "mydb";
+    // MongoDB configuration
+    private string $mongoUri = "mongodb://mongodb:27017";
+    private string $database = "livre_or";
 
+    protected $client;
     protected $db;
+    protected $utilisateursCollection;
+    protected $commentairesCollection;
 
-    // la connexion à la DB.
+    // MongoDB connection
 
     public function __construct()
     {
         try {
-            $this->db = new PDO(
-                "pgsql:host=$this->servername;dbname=$this->database",
-                "$this->username_b",
-                "$this->password_b"
-            );
-        } catch (PDOException $e) {
+            $this->client = new Client($this->mongoUri);
+            $this->db = $this->client->selectDatabase($this->database);
+            $this->utilisateursCollection = $this->db->selectCollection('utilisateurs');
+            $this->commentairesCollection = $this->db->selectCollection('commentaires');
+        } catch (Exception $e) {
             echo "ERROR: " . $e->getMessage();
         }
     }
@@ -39,15 +44,12 @@ class User
     }
 
     /**
-     * @return array[0]["$data"]
+     * @return array|null
      */
     public function check_DB($login)
     {
-        $data = $this->db->prepare(
-            "SELECT * FROM utilisateurs WHERE login=:login"
-        );
-        $data->execute([":login" => $login]);
-        return $data->fetchAll(PDO::FETCH_ASSOC);
+        $user = $this->utilisateursCollection->findOne(['login' => $login]);
+        return $user ? $user->toArray() : null;
     }
 
     /**
@@ -56,17 +58,23 @@ class User
      */
     public function register($email, $login, $password)
     {
-        if (empty($this->check_DB($login))):
-            $request = $this->db->prepare(
-                "INSERT INTO utilisateurs (email, login, password) VALUES (:email, :login, :password)"
-            );
-            $request->execute([
-                ":email" => $email,
-                ":login" => $login,
-                ":password" => $password,
-            ]);
-            return header("http/1.1 201 created");
-        endif;
+        $existingUser = $this->check_DB($login);
+        
+        if (empty($existingUser)) {
+            try {
+                $result = $this->utilisateursCollection->insertOne([
+                    'email' => $email,
+                    'login' => $login,
+                    'password' => $password,
+                ]);
+                
+                if ($result->getInsertedCount() > 0) {
+                    return header("http/1.1 201 created");
+                }
+            } catch (Exception $e) {
+                error_log("Erreur d'insertion: " . $e->getMessage());
+            }
+        }
         header("http/1.1 400 Bad Request");
     }
 
@@ -88,34 +96,36 @@ class User
 
     public function connection(string $login, string $password)
     {
-        $data = $this->check_DB($login);
+        $userData = $this->check_DB($login);
 
-        if (count($data) > 0):
-            $password_db = $data[0]["password"];
+        if (!empty($userData)) {
+            $password_db = $userData["password"];
 
-            if (password_verify($password, $password_db)):
+            if (password_verify($password, $password_db)) {
                 return true;
-            else:
+            } else {
                 return false;
-            endif;
+            }
+        } else {
             return false;
-        endif;
+        }
     }
 
     /**
-     * @return $id
+     * @return string|null
      */
     public function getId($login)
     {
-        $data = $this->check_DB($login);
+        $userData = $this->check_DB($login);
 
-        if (count($data) > 0):
-            return $data[0]["id"];
-        endif;
+        if (!empty($userData)) {
+            return (string) $userData["_id"];
+        }
+        return null;
     }
 
     /**
-     * @return $_POST['comment']
+     * @return string
      */
     public function securComment(string $comment): string
     {
@@ -124,29 +134,31 @@ class User
     }
 
     /**
-     * @return true,false
+     * @return bool
      */
     public function validComment(string $comment): bool
     {
-        if (strlen($comment) > 7):
+        if (strlen($comment) > 7) {
             return true;
-        else:
+        } else {
             return false;
-        endif;
+        }
     }
 
     /**
-     * inser comment in DB
+     * Insert comment in MongoDB
      */
     public function inserComment($comment, $id): void
     {
-        $requestComment = $this->db->prepare(
-            "INSERT INTO commentaires (commentaire, id_utilisateur, date) VALUES (:comment, :id, NOW())"
-        );
-        $result = $requestComment->execute([
-            ':comment' => $comment,
-            ':id' => $id
-        ]);
+        try {
+            $this->commentairesCollection->insertOne([
+                'commentaire' => $comment,
+                'id_utilisateur' => new ObjectId($id),
+                'date' => new UTCDateTime()
+            ]);
+        } catch (Exception $e) {
+            error_log("Erreur lors de l'insertion du commentaire: " . $e->getMessage());
+        }
     }
 
     public function deconnect()
@@ -157,26 +169,57 @@ class User
     }
 
     /**
-     **  Retrieve the data from the comments table and the login that posted the comment
-     //? utilisateurs INNER JOIN `commentaires` ON utilisateurs.id = commentaires.id_utilisateur
-     */
-    /**
-     * Retrieve all comments from the database
+     * Retrieve all comments from MongoDB with user login using aggregation
      *
      * @return array
      */
     public function livrOr(): array
     {
-        $queryAllComment = $this->db->prepare(
-            "SELECT login, commentaire, date FROM utilisateurs INNER JOIN commentaires ON utilisateurs.id = commentaires.id_utilisateur ORDER BY date DESC"
-        );
-        $queryAllComment->execute();
+        try {
+            $pipeline = [
+                [
+                    '$lookup' => [
+                        'from' => 'utilisateurs',
+                        'localField' => 'id_utilisateur',
+                        'foreignField' => '_id',
+                        'as' => 'user'
+                    ]
+                ],
+                [
+                    '$unwind' => '$user'
+                ],
+                [
+                    '$project' => [
+                        'login' => '$user.login',
+                        'commentaire' => 1,
+                        'date' => 1
+                    ]
+                ],
+                [
+                    '$sort' => ['date' => -1]
+                ]
+            ];
 
-        return $queryAllComment->fetchAll(PDO::FETCH_ASSOC);
+            $cursor = $this->commentairesCollection->aggregate($pipeline);
+            $results = [];
+
+            foreach ($cursor as $document) {
+                $results[] = [
+                    'login' => $document['login'],
+                    'commentaire' => $document['commentaire'],
+                    'date' => $document['date']->toDateTime()->format('Y-m-d H:i:s')
+                ];
+            }
+
+            return $results;
+        } catch (Exception $e) {
+            error_log("Erreur lors de la récupération des commentaires: " . $e->getMessage());
+            return [];
+        }
     }
 
     /**
-     * Update user profile
+     * Update user profile in MongoDB
      *
      * @param string $login
      * @param string $password
@@ -185,14 +228,19 @@ class User
      */
     public function update($login, $password, $lastLogin)
     {
-        $requ_updt = $this->db->prepare(
-            "UPDATE utilisateurs SET login=:login, password=:password WHERE login=:lastLogin"
-        );
-        $requ_updt->execute([
-            ":login" => $login,
-            ":password" => $password,
-            ":lastLogin" => $lastLogin
-        ]);
+        try {
+            $this->utilisateursCollection->updateOne(
+                ['login' => $lastLogin],
+                [
+                    '$set' => [
+                        'login' => $login,
+                        'password' => $password
+                    ]
+                ]
+            );
+        } catch (Exception $e) {
+            error_log("Erreur lors de la mise à jour: " . $e->getMessage());
+        }
     }
 
     public function getDb()
